@@ -1,0 +1,19 @@
+{
+  "vp": "localhost",
+  "theme": "db-theme-siemens-light",
+  "pages": [
+      {
+          "page": "compliance",
+          "qlikAppId": "4e2d4117-f850-496b-8eb4-df1ff570c961"
+      },
+      {
+          "page": "audit",
+          "qlikAppId": "96d1506e-4b0e-424b-8b8c-0a2d42c97e69"
+      },
+      {
+          "page": "reporting",
+          "qlikAppId": "4e2d4117-f850-496b-8eb4-df1ff570c961"
+      }
+  ],
+  "default": "compliance"
+}

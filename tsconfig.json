@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "src"
+  },
+  "files": [],
+  "include": ["custom_typings/index.d.ts", "src"],
+
+  "references": []
+}

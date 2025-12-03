@@ -1,0 +1,72 @@
+{
+    "name": "sh-poc-insight-frontend",
+    "version": "0.9.0",
+    "private": true,
+    "scripts": {
+        "build": "react-scripts build",
+        "reset": "rm -rf node_modules && yarn",
+        "start": "react-scripts start",
+        "test": "react-scripts test",
+        "start-server": "react-scripts build && node index.js",
+        "start-server-no-build": "node index.js",
+        "win-svc-install": "react-scripts build && node ./service-install.js",
+        "win-svc-uninstall": "node ./service-uninstall.js"
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "eslintConfig": {
+        "extends": [
+            "react-app",
+            "react-app/jest"
+        ]
+    },
+    "dependencies": {
+        "@databridge/qplus": "2.1.0-beta.31",
+        "@databridge/qplus-types": "2.0.3-beta.43",
+        "@emotion/react": "11.10.5",
+        "@emotion/styled": "11.10.5",
+        "@mui/icons-material": "5.11.0",
+        "@mui/lab": "^5.0.0-alpha.108",
+        "@mui/material": "5.11.8",
+        "buffer": "6.0.3",
+        "dotenv": "^16.0.1",
+        "express": "^4.18.1",
+        "js-base64": "^3.7.2",
+        "node-windows": "1.0.0-beta.6",
+        "prettier": "^2.8.7",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-responsive": "^9.0.0-beta.6",
+        "react-router-dom": "^6.8.1",
+        "tss-react": "^4.4.4",
+        "web-vitals": "3.1.1"
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "5.16.1",
+        "@testing-library/react": "12.1.2",
+        "@testing-library/user-event": "13.5.0",
+        "@types/jest": "27.4.0",
+        "@types/node": "17.0.13",
+        "@types/react": "17.0.38",
+        "@types/react-dom": "17.0.11",
+        "@types/react-router-dom": "5.3.3",
+        "prettier": "^2.6.2",
+        "react-inject-env": "^2.1.0",
+        "react-scripts": "5.0.0",
+        "typescript": "4.5.5"
+    },
+    "resolutions": {
+        "react-error-overlay ": "6.0.9",
+        "@types/react": "17.0.38"
+    }
+}

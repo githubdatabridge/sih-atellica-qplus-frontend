@@ -1,0 +1,96 @@
+import React from "react";
+import { useMediaQuery } from "react-responsive";
+import { makeStyles } from "tss-react/mui";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import List from "@mui/material/List";
+import { Box } from "@mui/material";
+
+import SvgLogo from "assets/icons/logo.svg";
+
+import Navbar from "./Navbar";
+
+interface Props {
+  isOpen: boolean;
+  closeDrawer: () => void;
+}
+
+const SideDrawer = ({ isOpen, closeDrawer }: Props) => {
+  const { classes } = useStyles();
+  const isMobile = useMediaQuery({ query: "(max-width: 570px)" });
+
+  const toggleDrawer =
+    () => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event &&
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
+
+      closeDrawer();
+    };
+
+  const list = () => (
+    <div
+      className={classes.list}
+      role="presentation"
+      onClick={toggleDrawer()}
+      onKeyDown={toggleDrawer()}
+    >
+      <List>
+        {isMobile && (
+          <Box textAlign="center" mt={2}>
+            <img
+              src={SvgLogo}
+              alt="Logo"
+              style={{ height: "2.5rem", width: "8.125rem" }}
+            />
+          </Box>
+        )}
+        <Navbar />
+      </List>
+    </div>
+  );
+
+  return (
+    <div>
+      <SwipeableDrawer
+        className={classes.backdrop}
+        open={isOpen}
+        onClose={toggleDrawer()}
+        onOpen={toggleDrawer()}
+        classes={{ paper: classes.paper }}
+      >
+        {list()}
+      </SwipeableDrawer>
+    </div>
+  );
+};
+
+const useStyles = makeStyles()({
+  list: {
+    width: 250,
+  },
+
+  paper: {
+    top: "70px",
+    boxShadow: "none",
+  },
+  navBarLink: {
+    borderBottom: "2px solid #E5E5E5",
+    padding: "15px 30px 15px 30px ",
+    width: "100%",
+  },
+  backdrop: {
+    "& div": {
+      top: "70px",
+      "@media (max-width: 475px)": {
+        width: "100%",
+      },
+    },
+  },
+});
+
+export default SideDrawer;
