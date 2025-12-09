@@ -1,16 +1,17 @@
-import { View } from 'app/shared/models/View'
+import { View } from "app/shared/models/View";
+import { TFunction } from "i18next";
 
-export const getReportingViews = (height?: number): View[] => {
-    return [
-        {
-            view: 'Self Service Reporting',
-            route: '/apps/dashboards/reporting',
-            subViews: []
-        },
-        {
-            view: 'Pin Wall',
-            route: '/apps/dashboards/reporting/pinwall',
-            subViews: []
-        }
-    ]
-}
+export const getReportingViews = (
+    t: TFunction<"translation", undefined, "translation">
+): View[] => [
+    {
+        view: t("sih-subheader-select-view-reporting-selfservice"),
+        route: "/apps/dashboards/reporting",
+        subViews: []
+    },
+    {
+        view: t("sih-subheader-select-view-reporting-pinwall"),
+        route: "/apps/dashboards/reporting/pinwall",
+        subViews: []
+    }
+];

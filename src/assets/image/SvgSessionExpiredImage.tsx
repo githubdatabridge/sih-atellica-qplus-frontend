@@ -1,4 +1,4 @@
-import * as React from 'react'
+import * as React from "react";
 
 function SvgSessionExpiredImage(props: React.SVGProps<SVGSVGElement>) {
     return (
@@ -8,7 +8,7 @@ function SvgSessionExpiredImage(props: React.SVGProps<SVGSVGElement>) {
             viewBox="0 0 48 48"
             height="240"
             width="240"
-            enable-background="new 0 0 48 48">
+            enableBackground="new 0 0 48 48">
             <circle fill="#00ACC1" cx="17" cy="17" r="14" />
             <circle fill="#eee" cx="17" cy="17" r="11" />
             <rect x="16" y="8" width="2" height="9" />
@@ -30,7 +30,7 @@ function SvgSessionExpiredImage(props: React.SVGProps<SVGSVGElement>) {
                 d="M26.4,39.9c0-0.2,0-0.4,0.1-0.6s0.2-0.3,0.3-0.5s0.3-0.2,0.5-0.3s0.4-0.1,0.6-0.1s0.5,0,0.7,0.1 s0.4,0.2,0.5,0.3s0.2,0.3,0.3,0.5s0.1,0.4,0.1,0.6s0,0.4-0.1,0.6s-0.2,0.3-0.3,0.5s-0.3,0.2-0.5,0.3s-0.4,0.1-0.7,0.1 s-0.5,0-0.6-0.1s-0.4-0.2-0.5-0.3s-0.2-0.3-0.3-0.5S26.4,40.1,26.4,39.9z M29.2,36.8h-2.3L26.5,27h3L29.2,36.8z"
             />
         </svg>
-    )
+    );
 }
 
-export default SvgSessionExpiredImage
+export default SvgSessionExpiredImage;

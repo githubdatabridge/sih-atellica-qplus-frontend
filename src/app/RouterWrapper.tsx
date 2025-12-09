@@ -1,18 +1,17 @@
-import React, { ReactNode } from 'react'
-import { BrowserRouter, HashRouter } from 'react-router-dom'
-import { env } from 'env'
+import { ReactNode } from "react";
+import { BrowserRouter, HashRouter } from "react-router-dom";
 
 type RouterWrapperProp = {
-    children: ReactNode
-}
+    children: ReactNode;
+};
 
-const RouterWrapper = ({ children }: RouterWrapperProp) => {
-    const isBrowserRouter = env.REACT_APP_ROUTER === 'Hash'
-    return isBrowserRouter ? (
+function RouterWrapper({ children }: RouterWrapperProp) {
+    const isHashRouter = window.env.VITE_ROUTER === "Hash";
+    return !isHashRouter ? (
         <BrowserRouter>{children}</BrowserRouter>
     ) : (
         <HashRouter>{children}</HashRouter>
-    )
+    );
 }
 
-export default RouterWrapper
+export default RouterWrapper;

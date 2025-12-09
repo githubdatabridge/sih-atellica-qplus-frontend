@@ -4,20 +4,22 @@ import { makeStyles } from "tss-react/mui";
 import { Theme } from "@mui/material";
 
 const useStyles = makeStyles()((theme: Theme) => ({
-  version: {
-    color: theme?.palette.common.primaryText,
-    fontSize: "1rem",
-    maxWidth: "18.5rem",
-    lineHeight: "1rem",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-  },
+    version: {
+        color: theme?.palette.common.primaryText,
+        fontSize: "1rem",
+        maxWidth: "18.5rem",
+        lineHeight: "1rem",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap"
+    }
 }));
 
-const VersionNumberTypography = () => {
-  const { classes } = useStyles();
+const APP_VERSION = import.meta.env.VITE_APP_VERSION || "N/A";
 
-  return <Typography className={classes.version}>Version 0.9</Typography>;
-};
+function VersionNumberTypography() {
+    const { classes } = useStyles();
+
+    return <Typography className={classes.version}>{`${APP_VERSION}`}</Typography>;
+}
 
 export default React.memo(VersionNumberTypography);

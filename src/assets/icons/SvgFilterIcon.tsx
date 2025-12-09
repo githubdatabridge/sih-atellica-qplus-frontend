@@ -1,12 +1,13 @@
-import * as React from 'react'
+import * as React from "react";
 
 function SvgFilterIcon(props: React.SVGProps<SVGSVGElement>) {
+    const { width, height } = props;
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             xmlnsXlink="http://www.w3.org/1999/xlink"
-            width={props.width || '32'}
-            height={props.height || '32'}
+            width={width || "32"}
+            height={height || "32"}
             viewBox="0 0 32 32">
             <defs>
                 <clipPath id="b">
@@ -22,7 +23,7 @@ function SvgFilterIcon(props: React.SVGProps<SVGSVGElement>) {
                 <rect fill="none" width="32" height="32" />
             </g>
         </svg>
-    )
+    );
 }
 
-export default SvgFilterIcon
+export default SvgFilterIcon;

@@ -1,64 +1,56 @@
-import React from 'react'
-import { useTheme } from '@mui/material/styles'
-import { makeStyles } from 'tss-react/mui'
-import ButtonBase from '@mui/material/ButtonBase'
-import { Badge } from '@mui/material'
-import { QplusBaseIconTooltip } from '@databridge/qplus'
-import { Theme } from '@mui/material'
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Theme, Badge } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import ButtonBase from "@mui/material/ButtonBase";
 
-import SvgHelpIcon from 'assets/icons/SvgHelpIcon'
+import { QplusBaseIconTooltip } from "@databridge/qplus";
 
-const NotificationCenter = () => {
-    const { classes } = useStyles()
-    const theme = useTheme<Theme>()
+import SvgHelpIcon from "assets/icons/SvgHelpIcon";
+import { useStyles } from "./HelpBadge.styles";
+import NewsAndUpdateDialog from "../dialog/news-and-update/NewsAndUpdateDialog";
+
+function NotificationCenter() {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const theme = useTheme<Theme>();
+    const { classes } = useStyles();
+
     const [iconColor, setIconColor] = React.useState<string>(
-        theme?.palette.common.secondaryText || ''
-    )
+        theme?.palette.common.secondaryText || ""
+    );
+    const { t } = useTranslation();
 
     const handleOnMouseLeave = () => {
-        setIconColor(theme?.palette.common.secondaryText || '')
-    }
+        setIconColor(theme?.palette.common.secondaryText || "");
+    };
 
     const handleOnMouseEnter = () => {
-        setIconColor(theme?.palette.common.primaryText || '')
-    }
+        setIconColor(theme?.palette.common.primaryText || "");
+    };
+
+    const handleOnCloseCallback = () => {
+        setIsOpen(false);
+    };
+
+    const APP_VERSION = import.meta.env.VITE_APP_VERSION || "N/A";
 
     return (
-        <QplusBaseIconTooltip title={'PoC Analytics and Reporting version 0.9. Coming soon!'}>
-            <ButtonBase
-                className={classes.button}
-                onMouseEnter={handleOnMouseEnter}
-                onMouseLeave={handleOnMouseLeave}>
-                <Badge classes={{ badge: classes.customBadge }} variant="dot">
-                    <SvgHelpIcon fill={iconColor} />
-                </Badge>
-            </ButtonBase>
-        </QplusBaseIconTooltip>
-    )
+        <>
+            <QplusBaseIconTooltip
+                title={`${t("sih-header-control-info-tooltip")} - ${APP_VERSION}`}>
+                <ButtonBase
+                    className={classes.button}
+                    onMouseEnter={handleOnMouseEnter}
+                    onMouseLeave={handleOnMouseLeave}
+                    onClick={() => setIsOpen(true)}>
+                    <Badge classes={{ badge: classes.customBadge }} variant="dot">
+                        <SvgHelpIcon fill={iconColor} />
+                    </Badge>
+                </ButtonBase>
+            </QplusBaseIconTooltip>
+            <NewsAndUpdateDialog open={isOpen} handleOnCloseCallback={handleOnCloseCallback} />
+        </>
+    );
 }
 
-const useStyles = makeStyles()((theme: Theme) => ({
-    customBadge: {
-        backgroundColor: theme?.palette.common.ui0,
-        color: theme?.palette.common.whiteText
-    },
-    button: {
-        height: 60,
-        width: 60,
-        display: 'flex',
-        alignItems: 'center',
-        color: theme.palette.text.primary,
-        padding: theme.spacing(1),
-        textAlign: theme.direction === 'ltr' ? 'left' : 'right',
-        marginRight: '10px',
-        '@media (max-width: 500px)': {
-            width: 32,
-            marginRight: 0,
-            '& > span': {
-                width: '24px'
-            }
-        }
-    }
-}))
-
-export default React.memo(NotificationCenter)
+export default React.memo(NotificationCenter);

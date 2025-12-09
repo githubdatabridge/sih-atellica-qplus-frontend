@@ -1,32 +1,32 @@
-import React, { useState, useRef } from 'react'
-import { useTheme } from '@mui/material/styles'
-import { makeStyles } from 'tss-react/mui'
-import SwipeableDrawer from '@mui/material/SwipeableDrawer'
-import Box from '@mui/material/Box'
-import IconButton from '@mui/material/IconButton'
-import Badge from '@mui/material/Badge'
-import { QplusBaseIconTooltip } from '@databridge/qplus'
-import { Theme } from '@mui/material'
+import React, { useState, useRef } from "react";
+import { useTheme } from "@mui/material/styles";
+import { makeStyles } from "tss-react/mui";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Badge from "@mui/material/Badge";
+import { QplusBaseIconTooltip } from "@databridge/qplus";
+import { Theme } from "@mui/material";
 
-import SvgFilterIcon from 'assets/icons/SvgFilterIcon'
-import { useAppContext } from 'app/context/AppContext'
-import SelectionBar from '../chip/SelectionBar'
+import SvgFilterUserIcon from "assets/icons/SvgFilterUserIcon";
+import { useAppContext } from "app/context/AppContext";
+import SelectionBar from "../chip/SelectionBar";
 
 const useStyles = makeStyles()((theme: Theme) => ({
     root: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        alignContent: 'center'
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        alignContent: "center"
     },
     notificationIconButton: {
-        '&:hover': {
-            cursor: 'pointer'
+        "&:hover": {
+            cursor: "pointer"
         },
-        '@media (max-width: 500px)': {
-            padding: '6px',
-            '& span': {
-                width: '24px'
+        "@media (max-width: 500px)": {
+            padding: "6px",
+            "& span": {
+                width: "24px"
             }
         }
     },
@@ -38,80 +38,80 @@ const useStyles = makeStyles()((theme: Theme) => ({
         color: theme.palette.common.whiteText
     },
     paper: {
-        top: '64px',
-        boxShadow: 'none'
+        top: "64px",
+        boxShadow: "none"
     },
     navTitle: {
-        paddingLeft: '30px',
-        backgroundColor: 'transparent',
-        cursor: 'default',
-        '&:hover': {
-            backgroundColor: 'transparent !important'
+        paddingLeft: "30px",
+        backgroundColor: "transparent",
+        cursor: "default",
+        "&:hover": {
+            backgroundColor: "transparent !important"
         }
     },
     navItem: {
-        width: '100%',
-        textAlign: 'start',
-        '& span': {
-            fontSize: '18px'
+        width: "100%",
+        textAlign: "start",
+        "& span": {
+            fontSize: "18px"
         }
     },
     backdrop: {
-        top: '64px !important',
-        '& > div': {
-            top: '64px !important'
+        top: "64px !important",
+        "& > div": {
+            top: "64px !important"
         },
-        '@media (max-width: 599px)': {
-            top: '56px !important',
-            '& > div': {
-                top: '56px !important'
+        "@media (max-width: 599px)": {
+            top: "56px !important",
+            "& > div": {
+                top: "56px !important"
             }
         }
     }
-}))
+}));
 
 export default function FilterButton() {
-    const { selectionCount } = useAppContext()
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const { selectionCount } = useAppContext();
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-    const { classes } = useStyles()
-    const theme = useTheme<Theme>()
-    const [color, setColor] = React.useState<any>(theme.palette.common.secondaryText)
-    const anchorRef = useRef(null)
+    const { classes } = useStyles();
+    const theme = useTheme<Theme>();
+    const [color, setColor] = React.useState<string>(theme.palette.common.secondaryText);
+    const anchorRef = useRef(null);
 
     const handleIconMouseOver = () => {
-        setColor(theme.palette.common.primaryText)
-    }
+        setColor(theme.palette.common.primaryText);
+    };
 
     const handleIconMouseLeave = () => {
-        setColor(theme.palette.common.secondaryText)
-    }
+        setColor(theme.palette.common.secondaryText);
+    };
 
     const toggleDrawer = () => (event: React.KeyboardEvent | React.MouseEvent) => {
         if (
             event &&
-            event.type === 'keydown' &&
-            ((event as React.KeyboardEvent).key === 'Tab' ||
-                (event as React.KeyboardEvent).key === 'Shift')
+            event.type === "keydown" &&
+            ((event as React.KeyboardEvent).key === "Tab" ||
+                (event as React.KeyboardEvent).key === "Shift")
         ) {
-            return
+            return;
         }
 
-        setIsDrawerOpen(!isDrawerOpen)
-    }
+        setIsDrawerOpen(!isDrawerOpen);
+    };
 
     const list = () => (
         <div className={classes.list} role="presentation" onKeyDown={toggleDrawer()}>
             <Box>
-                <SelectionBar isVertical={true} />
+                <SelectionBar isVertical />
             </Box>
         </div>
-    )
+    );
 
     return (
         <div className={classes.root}>
             <div>
-                <QplusBaseIconTooltip title={'Notification Center'}>
+                <QplusBaseIconTooltip title="Notification Center">
                     <IconButton
                         ref={anchorRef}
                         className={classes.notificationIconButton}
@@ -121,7 +121,7 @@ export default function FilterButton() {
                         <Badge
                             classes={{ badge: classes.customBadge }}
                             badgeContent={selectionCount}>
-                            <SvgFilterIcon fill={color} />
+                            <SvgFilterUserIcon fill={color} />
                         </Badge>
                     </IconButton>
                 </QplusBaseIconTooltip>
@@ -136,5 +136,5 @@ export default function FilterButton() {
                 </SwipeableDrawer>
             </div>
         </div>
-    )
+    );
 }

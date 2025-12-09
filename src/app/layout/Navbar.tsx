@@ -1,42 +1,47 @@
-import React, { useEffect, useState } from 'react'
-import { Theme } from '@mui/material/styles'
-import { makeStyles } from 'tss-react/mui'
-import List from '@mui/material/List'
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import List from "@mui/material/List";
 
-import { useAppContext } from 'app/context/AppContext'
-import NavbarButtonLink from './components/button/NavbarButtonLink'
-import { dashboardUrl } from './constants/constants'
+import { useAppContext } from "app/context/AppContext";
+import NavbarButtonLink from "./components/button/NavbarButtonLink";
+import { DASHBOARD_URL_PATH } from "./constants/constants";
+import { useStyles } from "./Navbar.styles";
 
-const Navbar = () => {
-    const [items, setItems] = useState<any>([])
-    const { pages } = useAppContext()
+function Navbar() {
+    const { t } = useTranslation();
+    const { classes } = useStyles();
+
+    const { pages } = useAppContext();
+    const [items, setItems] = useState<{ path: string; title: string }[]>([]);
 
     useEffect(() => {
-        const menuItems = []
+        const menuItems = [];
         if (pages) {
-            if (pages.get('compliance')) {
+            if (pages.get("compliance")) {
                 menuItems.push({
-                    path: `${dashboardUrl}/compliance`,
-                    title: 'Compliance'
-                })
+                    path: `${DASHBOARD_URL_PATH}/compliance`,
+                    title: t("sih-header-menu-compliance")
+                });
             }
-            if (pages.get('audit')) {
-                menuItems.push({ path: `${dashboardUrl}/audit`, title: 'Audit' })
-            }
-            if (pages.get('reporting')) {
+            if (pages.get("audit")) {
                 menuItems.push({
-                    path: `${dashboardUrl}/reporting`,
-                    title: 'Reporting'
-                })
+                    path: `${DASHBOARD_URL_PATH}/audit`,
+                    title: t("sih-header-menu-audit")
+                });
+            }
+            if (pages.get("reporting")) {
+                menuItems.push({
+                    path: `${DASHBOARD_URL_PATH}/reporting`,
+                    title: t("sih-header-menu-reporting")
+                });
             }
         }
 
-        setItems(menuItems)
-    }, [pages])
+        setItems(menuItems);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pages]);
 
-    const { classes } = useStyles()
-
-    if (!items || items.length === 0) return null
+    if (!items || items.length === 0) return null;
 
     return (
         <List component="nav" className={classes.list}>
@@ -46,36 +51,7 @@ const Navbar = () => {
                 </div>
             ))}
         </List>
-    )
+    );
 }
 
-const useStyles = makeStyles()((theme: Theme) => ({
-    list: {
-        overflow: 'auto',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'left',
-        marginLeft: '50px',
-        marginTop: '-10px',
-        '@media (max-width: 1029px)': {
-            marginLeft: '20px'
-        },
-        '@media (max-width: 951px)': {
-            flexDirection: 'column',
-            marginLeft: '0px',
-            textAlign: 'center'
-        }
-    },
-    listItem: {
-        paddingRight: '10px',
-        paddingLeft: '10px',
-        '@media (max-width: 951px)': {
-            alignSelf: 'center',
-            width: '100%',
-            paddingRight: '0px',
-            paddingLeft: '0px'
-        }
-    }
-}))
-
-export default Navbar
+export default Navbar;

@@ -1,16 +1,32 @@
 {
-  "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-    "jsx": "react-jsx",
-    "allowJs": true,
-    "esModuleInterop": true,
-    "downlevelIteration": true,
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "baseUrl": "src"
-  },
-  "files": [],
-  "include": ["custom_typings/index.d.ts", "src"],
+    "compilerOptions": {
+        "target": "ESNext",
+        "jsx": "react-jsx",
+        "allowJs": true,
+        "esModuleInterop": true,
+        "downlevelIteration": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "noEmit": true,
+        "noFallthroughCasesInSwitch": true,
+        "types": ["vite/client", "vite-plugin-svgr/client"],
+        "baseUrl": ".",
+        "paths": {
+            "app/*": ["src/app/*"],
+            "assets/*": ["src/assets/*"]
+        }
+    },
+    "include": [
+        ".eslintrc.js",
+        "custom_typings/index.d.ts",
+        "commitlint.config.js",
+        "src",
+        "env.ts",
+        "vite.config.ts"
+    ],
 
-  "references": []
+    "references": []
 }

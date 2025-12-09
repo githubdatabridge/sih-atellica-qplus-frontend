@@ -1,47 +1,61 @@
-// @ts-nocheck
-import React, { Suspense, useEffect, useState } from 'react'
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import Skeleton from '@mui/material/Skeleton'
-import { Box, CircularProgress } from '@mui/material'
+import React, { Suspense, useEffect } from "react";
+import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import Skeleton from "@mui/material/Skeleton";
+import { Box, CircularProgress } from "@mui/material";
 import {
     useQplusAuthContext,
-    useQplusI18nContext,
     useQplusPreferencesContext,
     useQplusSelectionContext,
     userQplusPreferenceService
-} from '@databridge/qplus'
+} from "@databridge/qplus";
 
-import { useAppContext } from 'app/context/AppContext'
-import Layout from 'app/layout/Layout'
-import { dashboardUrl } from 'app/layout/constants/constants'
+import { useAppContext } from "app/context/AppContext";
+import Layout from "app/layout/Layout";
+import { DASHBOARD_URL_PATH } from "app/layout/constants/constants";
+import { QPLUS_USER_ROLES } from "app/shared/constants/constants";
+import { clearUrlParams, clearUrlParamsInHashRouter } from "app/utils/appUtils";
+import { setSessionStorageItem } from "app/utils/storageUtils";
+import { POCWEB_LAST_VISITED_PAGE } from "app/config/appConfig";
 
-const ComplianceDashboard = React.lazy(() => import('./compliance/ComplianceDashboard'))
-const AuditDashboard = React.lazy(() => import('./audit/AuditDashboard'))
-const ReportingDashboard = React.lazy(() => import('./reporting/ReportingDashboard'))
-const PinwallDashboard = React.lazy(() => import('./pinwall/PinwallDashboard'))
-const AdminDashboard = React.lazy(() => import('./admin/AdminDashboard'))
+const ComplianceDashboard = React.lazy(() => import("./compliance/ComplianceDashboard"));
+const AuditDashboard = React.lazy(() => import("./audit/AuditDashboard"));
+const ReportingDashboard = React.lazy(() => import("./reporting/ReportingDashboard"));
+const PinwallDashboard = React.lazy(() => import("./pinwall/PinwallDashboard"));
+const AdminDashboard = React.lazy(() => import("./admin/AdminDashboard"));
+const LoaderPage = React.lazy(() => import("./loader/LoaderPage"));
 
-const DashboardPage = React.memo(() => {
-    const { labelsIsLoading } = useQplusI18nContext()
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-    const { qSelectionMap } = useQplusSelectionContext()
-    const { setIsAppLoading, isAppLoading, pages, defaultPage, isHeaderVisible } = useAppContext()
-    const { userPreferences, setUserPreferences, refreshPreferences } = useQplusPreferencesContext()
-    const { appUser } = useQplusAuthContext()
-    const location = useLocation()
+const RouteApp = React.memo(() => {
+    const { qSelectionMap } = useQplusSelectionContext();
+    const { isAppLoading, pages, defaultPage, isHeaderVisible } = useAppContext();
+    const { userPreferences, setUserPreferences, refreshPreferences } =
+        useQplusPreferencesContext();
+    const { appUser } = useQplusAuthContext();
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
-        setIsLoading(labelsIsLoading)
-        setIsAppLoading(labelsIsLoading)
-    }, [labelsIsLoading, setIsAppLoading])
+        const isHashRouter = window.env.VITE_ROUTER === "Hash";
+        if (!isHashRouter) {
+            clearUrlParams(navigate, defaultPage);
+        } else {
+            clearUrlParamsInHashRouter(defaultPage);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [defaultPage]);
 
     useEffect(() => {
-        void (async () => {
+        if (location?.pathname && !location.pathname?.includes("loader")) {
+            setSessionStorageItem(POCWEB_LAST_VISITED_PAGE, location.pathname);
+        }
+    }, [location?.pathname]);
+
+    useEffect(() => {
+        (async () => {
             try {
-                if (!isLoading && !isAppLoading) {
-                    const name = /[^/]*$/.exec(location.pathname)[0]
-                    if (name === 'compliance' || name === 'audit') {
-                        const qSelection = qSelectionMap.get(pages.get(name))
+                if (!isAppLoading) {
+                    const name = /[^/]*$/.exec(location.pathname)[0];
+                    if (name === "compliance" || name === "audit") {
+                        const qSelection = qSelectionMap.get(pages.get(name));
 
                         if (qSelection?.qDockedFields) {
                             const newPreferences =
@@ -53,20 +67,22 @@ const DashboardPage = React.memo(() => {
                                             [name]: qSelection?.qDockedFields
                                         }
                                     }
-                                })
-                            setUserPreferences(newPreferences)
-                            refreshPreferences()
+                                });
+                            setUserPreferences(newPreferences);
+                            refreshPreferences();
                         }
                     }
                 }
             } catch (e) {
-                console.log(e)
+                console.log(e);
             }
-        })()
+        })().catch(error => {
+            console.error(error);
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [qSelectionMap])
+    }, [qSelectionMap]);
 
-    if (isLoading || isAppLoading) return null
+    if (isAppLoading) return null;
 
     return (
         <Layout>
@@ -77,49 +93,56 @@ const DashboardPage = React.memo(() => {
                         alignItems="center"
                         justifyContent="center"
                         height="800px"
-                        sx={{ marginTop: isHeaderVisible ? '225px' : '72px' }}>
+                        sx={{ marginTop: isHeaderVisible ? "225px" : "72px" }}>
                         <Skeleton />
                         <CircularProgress color="secondary" size={80} />
                     </Box>
                 }>
                 <Routes>
-                    <Route path="/*" element={<Navigate to={`${dashboardUrl}/${defaultPage}`} />} />
-                    {pages.get('compliance') && (
+                    <Route
+                        path="/*"
+                        element={<Navigate to={`${DASHBOARD_URL_PATH}/${defaultPage}`} />}
+                    />
+                    <Route path={`${DASHBOARD_URL_PATH}/loader/*`} element={<LoaderPage />} />
+                    {pages.get("compliance") && (
                         <Route
-                            path={`${dashboardUrl}/compliance/*`}
+                            path={`${DASHBOARD_URL_PATH}/compliance/*`}
                             element={<ComplianceDashboard />}
                         />
                     )}
-                    {pages.get('reporting') && (
+                    {pages.get("reporting") && (
                         <>
                             <Route
-                                path={`${dashboardUrl}/reporting/*`}
+                                path={`${DASHBOARD_URL_PATH}/reporting/*`}
                                 element={<ReportingDashboard />}
                             />
                             <Route
-                                path={`${dashboardUrl}/reporting/pinwall/*`}
+                                path={`${DASHBOARD_URL_PATH}/reporting/pinwall/*`}
                                 element={<PinwallDashboard />}
                             />
                         </>
                     )}
-                    {pages.get('audit') && (
-                        <Route path={`${dashboardUrl}/audit/*`} element={<AuditDashboard />} />
+                    {pages.get("audit") && (
+                        <Route
+                            path={`${DASHBOARD_URL_PATH}/audit/*`}
+                            element={<AuditDashboard />}
+                        />
                     )}
-
                     <Route
-                        path={`${dashboardUrl}/administration/*`}
+                        path={`${DASHBOARD_URL_PATH}/administration/*`}
                         element={
-                            appUser?.roles?.includes('admin') && pages.get('reporting') ? (
+                            appUser?.roles?.includes(QPLUS_USER_ROLES.ADMIN) &&
+                            pages.get("reporting") ? (
                                 <AdminDashboard />
                             ) : (
-                                <Navigate to={`${dashboardUrl}/${defaultPage}`} />
+                                <Navigate to={`${DASHBOARD_URL_PATH}/${defaultPage}`} />
                             )
                         }
                     />
                 </Routes>
             </Suspense>
         </Layout>
-    )
-})
+    );
+});
 
-export default DashboardPage
+export default RouteApp;

@@ -12,61 +12,60 @@ import CopyrightTypography from "./components/typography/CopyrightTypography";
 import SplashScreenLoader from "./components/loader/SplashScreenLoader";
 
 const useStyles = makeStyles()((theme: Theme) => ({
-  root: {
-    maxWidth: "1920px !important",
-    height: "100%",
-    padding: "0px !important",
-  },
-  content: {
-    flexGrow: 1,
-    position: "relative",
-    backgroundColor: theme?.palette.common.ui7,
-    padding: "0px",
-  },
-  toolbar: {
-    minHeight: "72px",
-  },
+    root: {
+        maxWidth: "1920px !important",
+        height: "100%",
+        padding: "0px !important"
+    },
+    content: {
+        flexGrow: 1,
+        position: "relative",
+        backgroundColor: theme?.palette.common.ui7,
+        padding: "0px"
+    },
+    toolbar: {
+        minHeight: "72px"
+    }
 }));
 
-export const SplashScreen = () => {
-  const [iHeight, setIHeight] = useState<number>(0);
-  const { height } = useWindowDimensions();
-  const { classes } = useStyles();
+export function SplashScreen() {
+    const [iHeight, setIHeight] = useState<number>(0);
+    const { height } = useWindowDimensions();
+    const { classes } = useStyles();
 
-  useEffect(() => {
-    setIHeight(height);
-    return () => {};
-  }, [height]);
+    useEffect(() => {
+        setIHeight(height);
+        return () => {};
+    }, [height]);
 
-  if (iHeight === 0) return null;
+    if (iHeight === 0) return null;
 
-  return (
-    <Container className={classes.root}>
-      <HeaderSplashScreen />
-      <main className={classes.content}>
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          style={{ height: `${iHeight - 100}px` }}
-          textAlign="center"
-        >
-          <Box flexDirection="column">
-            <Box>
-              <ProductInfoTypography />
-            </Box>
-            <Box>
-              <VersionNumberTypography />
-            </Box>
-            <Box pt={1}>
-              <SplashScreenLoader />
-            </Box>
-          </Box>
-        </Box>
-        <Box style={{ paddingBottom: "8px", paddingLeft: "8px" }}>
-          <CopyrightTypography />
-        </Box>
-      </main>
-    </Container>
-  );
-};
+    return (
+        <Container className={classes.root}>
+            <HeaderSplashScreen />
+            <main className={classes.content}>
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    style={{ height: `${iHeight - 100}px` }}
+                    textAlign="center">
+                    <Box flexDirection="column">
+                        <Box>
+                            <ProductInfoTypography />
+                        </Box>
+                        <Box>
+                            <VersionNumberTypography />
+                        </Box>
+                        <Box pt={1}>
+                            <SplashScreenLoader />
+                        </Box>
+                    </Box>
+                </Box>
+                <Box style={{ paddingBottom: "8px", paddingLeft: "8px" }}>
+                    <CopyrightTypography />
+                </Box>
+            </main>
+        </Container>
+    );
+}

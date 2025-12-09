@@ -1,89 +1,63 @@
-import React, { useEffect, useMemo } from 'react'
-import { useMount } from 'react-use'
-import { makeStyles } from 'tss-react/mui'
-import { Theme } from '@mui/material'
+import React, { useEffect, useMemo } from "react";
+import { useMount } from "react-use";
+import { Backspace } from "@mui/icons-material";
 import {
     QplusPinWall,
     useQplusAppContext,
+    useQplusPinWallUiContext,
     useQplusSelectionContext,
     useWindowDimensions
-} from '@databridge/qplus'
+} from "@databridge/qplus";
 
-import { OFFSET_COLLAPSED, OFFSET_EXPANDED } from 'app/common/config'
-import { useAppContext } from 'app/context/AppContext'
-import SelectionBar from './components/SelectionBar'
-import DashboardTemplate from '../shared/components/DashboardTemplate'
+import { OFFSET_COLLAPSED, OFFSET_EXPANDED } from "app/common/config";
+import { useAppContext } from "app/context/AppContext";
+import DashboardTemplate from "../shared/components/DashboardTemplate";
+import { useStyles } from "./PinwallDashabord.styles";
 
 const PinwallDashboard = React.memo(() => {
-    const { defaultFilters, isHeaderVisible } = useAppContext()
-    const { qAppMap } = useQplusAppContext()
-    const { setDockedFields } = useQplusSelectionContext()
+    const { isHeaderVisible } = useAppContext();
+    const { qAppMap } = useQplusAppContext();
+    const { setDockedFields } = useQplusSelectionContext();
+    const { setPinwallEraseNode } = useQplusPinWallUiContext();
 
-    const [windowHeight, setWindowHeight] = React.useState<number>(0)
-    const { height } = useWindowDimensions()
+    const [windowHeight, setWindowHeight] = React.useState<number>(0);
+    const { height } = useWindowDimensions();
+
+    const { classes } = useStyles();
 
     const views = useMemo(
-        () => [
-            'Filter',
-            'Favorite',
-            'Erase',
-            'Delete',
-            'Edit',
-            'Clone',
-            'Cancel',
-            'Add',
-            'Fullscreen'
-        ],
+        () => ["Filter", "Favorite", "Erase", "Delete", "Edit", "Clone", "Cancel", "Fullscreen"],
         []
-    )
-
-    const { classes } = useStyles()
+    );
 
     useMount(async () => {
         for (const [, value] of qAppMap) {
-            value?.qApi.clearAll()
+            value?.qApi.clearAll();
         }
-
-        setDockedFields([])
-    })
+        setDockedFields([]);
+        setPinwallEraseNode(<Backspace />);
+    });
 
     useEffect(() => {
-        setWindowHeight(height - (isHeaderVisible ? OFFSET_EXPANDED : OFFSET_COLLAPSED))
-    }, [height, isHeaderVisible])
+        setWindowHeight(height - (isHeaderVisible ? OFFSET_EXPANDED : OFFSET_COLLAPSED));
+    }, [height, isHeaderVisible]);
 
     return (
         <DashboardTemplate>
             <QplusPinWall
-                defaultFilters={defaultFilters}
                 views={views}
                 height={windowHeight - 45}
                 isToolbarWithDivider={false}
-                showAppWatermark={true}
-                classNames={{
-                    sideDrawerPaper: classes.sideDrawerPaper
-                }}
-                filterNode={<SelectionBar isVertical={true} />}
+                showAppWaterMark
                 exportOptions={{
-                    types: ['xlsx', 'pdf', 'png']
+                    types: ["xlsx", "pdf", "png"]
+                }}
+                classNames={{
+                    toolbarIcon: classes.vizToolbarIcon
                 }}
             />
         </DashboardTemplate>
-    )
-})
+    );
+});
 
-export default PinwallDashboard
-
-const useStyles = makeStyles()((theme: Theme) => ({
-    header: {
-        boxShadow: '0 0 0rem rgba(0,0,0,0.20);'
-    },
-    headerPinwall: {
-        backgroundColor: `${theme.palette.common.white} !important`
-    },
-    gridWall: {
-        background: theme.palette.common.highlight5
-    },
-    sideDrawerPaper: {
-        background: theme.palette.primary.main
-    }
-}))
+export default PinwallDashboard;

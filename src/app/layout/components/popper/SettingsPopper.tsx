@@ -1,160 +1,118 @@
-import React, { FC, useState, useRef, useEffect } from 'react'
-import { makeStyles } from 'tss-react/mui'
-import { useMount } from 'react-use'
-import { Link, useLocation } from 'react-router-dom'
-import { useTheme } from '@mui/material/styles'
-import SettingsIcon from '@mui/icons-material/Settings'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
-import Grow from '@mui/material/Grow'
-import Paper from '@mui/material/Paper'
-import Popper from '@mui/material/Popper'
-import MenuItem from '@mui/material/MenuItem'
-import MenuList from '@mui/material/MenuList'
-import { userService } from '@databridge/core-services'
+import React, { FC, useEffect, useRef, useState } from "react";
+import { useMount } from "react-use";
+import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
+import { Theme } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import SettingsIcon from "@mui/icons-material/Settings";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import { userService } from "@databridge/core-services";
+
 import {
-    QplusLocalStorage,
     QPLUS_KEYS,
     QplusBaseIconTooltip,
+    QplusLocalStorage,
     useQplusAuthContext
-} from '@databridge/qplus'
-import { Theme } from '@mui/material'
+} from "@databridge/qplus";
 
-import { useAppContext } from 'app/context/AppContext'
+import { useAppContext } from "app/context/AppContext";
+import { ROLE_PERMISSIONS, QPLUS_USER_ROLES } from "app/shared/constants/constants";
+import { useStyles } from "./SettingsPopper.styles";
 
 interface ISettingsPopper {
-    mode?: string
+    mode?: string;
 }
 
-const SettingsPopper: FC<ISettingsPopper> = ({ mode = 'dark' }) => {
-    const [isAdmin, setIsAdmin] = useState<boolean>(false)
-    const [open, setOpen] = useState<boolean>(false)
-    const [, setUser] = useState<any>(null)
-    const [, setOpenPreferences] = useState(false)
-    const anchorRef = useRef(null)
-    const theme = useTheme<Theme>()
-    const [color, setColor] = useState<any>(theme.palette.primary.contrastText)
-    const { appUser } = useQplusAuthContext()
-    const { isAdminRole, setIsAdminRole } = useAppContext()
-    const { pathname } = useLocation()
+const SettingsPopper: FC<ISettingsPopper> = () => {
+    const theme = useTheme<Theme>();
+    const { classes } = useStyles();
+    const { pathname } = useLocation();
+    const { t } = useTranslation();
 
-    const useStyles = makeStyles()((theme: Theme) => ({
-        root: {
-            display: 'flex'
-        },
-        menuItem: {
-            fontWeight: 500
-        },
-        text: {
-            color: theme.palette.text.primary,
-            '&:hover': {
-                color: theme.palette.primary.contrastText
-            }
-        },
-        icon: {
-            width: 32,
-            height: 32,
-            backgroundColor: 'transparent',
-            color: theme!.palette.common.secondaryText,
-            '&:hover': {
-                backgroundColor: 'transparent',
-                color: theme!.palette.common.secondaryText
-            },
-            '@media (max-width: 500px)': {
-                width: '24px'
-            }
-        },
-        iconActive: {
-            width: 32,
-            height: 32,
-            backgroundColor: 'transparent',
-            color: theme!.palette.secondary.main,
-            '&:hover': {
-                backgroundColor: 'transparent',
-                color: theme!.palette.secondary.main
-            },
-            '@media (max-width: 500px)': {
-                width: '24px'
-            }
-        },
-        settingsIconButton: {
-            backgroundColor: 'transparent',
-            '&:hover': {
-                cursor: 'pointer',
-                backgroundColor: 'transparent'
-            },
-            '@media (max-width: 500px)': {
-                padding: '6px',
-                '& > span': {
-                    width: '24px'
-                }
-            }
-        }
-    }))
+    const { isAdminRole, setIsAdminRole } = useAppContext();
+    const { appUser } = useQplusAuthContext();
+
+    const [isAdmin, setIsAdmin] = useState<boolean>(false);
+    const [open, setOpen] = useState<boolean>(false);
+    const [, setUser] = useState<object | null>(null);
+    const [, setOpenPreferences] = useState(false);
+    const [color, setColor] = useState<string>(theme.palette.primary.contrastText);
+    const anchorRef = useRef(null);
 
     useMount(async () => {
-        const currentUser = await userService.getCurrentUser()
-        setUser(currentUser)
-    })
+        const currentUser = await userService.getCurrentUser();
+        setUser(currentUser);
+    });
 
     useEffect(() => {
-        if (appUser?.roles?.includes('admin')) {
-            QplusLocalStorage.save(QPLUS_KEYS.QPLUS_ROLE_IS_ADMIN, true)
-            setIsAdminRole(true)
+        if (appUser?.roles?.includes(QPLUS_USER_ROLES.ADMIN)) {
+            QplusLocalStorage.save(QPLUS_KEYS.QPLUS_ROLE_IS_ADMIN, true);
+            setIsAdminRole(true);
         } else {
-            QplusLocalStorage.save(QPLUS_KEYS.QPLUS_ROLE_IS_ADMIN, true)
-            setIsAdminRole(false)
+            QplusLocalStorage.save(QPLUS_KEYS.QPLUS_ROLE_IS_ADMIN, false);
+            setIsAdminRole(false);
         }
-    }, [appUser?.roles, setIsAdminRole])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [appUser?.roles]);
 
     useEffect(() => {
-        setIsAdmin(isAdminRole)
-    }, [isAdminRole])
+        setIsAdmin(isAdminRole);
+    }, [isAdminRole]);
 
     const handleToggle = () => {
-        setOpen(prevOpen => !prevOpen)
-    }
+        setOpen(prevOpen => !prevOpen);
+    };
 
-    const handleClose = (event: any) => {
+    const handleClose = (event: MouseEvent | TouchEvent) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
-            return
+            return;
         }
-        setOpen(false)
-    }
+        setOpen(false);
+    };
 
-    const handleOpenPreferences = (event: any, isOpen: boolean) => {
-        setOpenPreferences(isOpen)
+    const handleOpenPreferences = (
+        event: React.MouseEvent<HTMLLIElement, MouseEvent>,
+        isOpen: boolean
+    ) => {
+        setOpenPreferences(isOpen);
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
-            return
+            return;
         }
-        setOpen(false)
-    }
+        setOpen(false);
+    };
 
     const handleIconMouseOver = () => {
-        setColor(theme.palette.text.primary)
-    }
+        setColor(theme.palette.text.primary);
+    };
 
     const handleIconMouseLeave = () => {
-        setColor(theme.palette.text.primary)
-    }
+        setColor(theme.palette.text.primary);
+    };
 
-    const { classes } = useStyles()
+    const isSettingsVisible = isAdmin && appUser?.scopes.includes(ROLE_PERMISSIONS.WRITE);
 
-    return appUser && appUser?.roles?.includes('admin') ? (
+    return isSettingsVisible ? (
         <div className={classes.root}>
-            <QplusBaseIconTooltip title={'Settings'}>
+            <QplusBaseIconTooltip placement="left" title={t("sih-header-control-settings-tooltip")}>
                 <IconButton
                     ref={anchorRef}
                     onClick={handleToggle}
                     className={classes.settingsIconButton}
                     onMouseOver={handleIconMouseOver}
                     onMouseLeave={handleIconMouseLeave}
-                    disabled={!isAdmin}>
+                    disabled={!isSettingsVisible}>
                     <SettingsIcon
                         fill={color}
                         className={
-                            pathname?.includes('administration') ? classes.iconActive : classes.icon
+                            pathname?.includes("administration") ? classes.iconActive : classes.icon
                         }
                     />
                 </IconButton>
@@ -171,19 +129,19 @@ const SettingsPopper: FC<ISettingsPopper> = ({ mode = 'dark' }) => {
                         {...TransitionProps}
                         style={{
                             zIndex: 9999,
-                            transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'
+                            transformOrigin: placement === "bottom" ? "center top" : "center bottom"
                         }}>
                         <Paper style={{ zIndex: 1000000000 }}>
                             <ClickAwayListener onClickAway={handleClose}>
-                                <MenuList style={{ zIndex: 1000000000, fontSize: '12px' }}>
+                                <MenuList style={{ zIndex: 1000000000, fontSize: "12px" }}>
                                     <MenuItem
                                         className={classes.menuItem}
                                         onClick={e => handleOpenPreferences(e, true)}>
                                         <Link
-                                            style={{ color: 'inherit', textDecoration: 'none' }}
+                                            style={{ color: "inherit", textDecoration: "none" }}
                                             to="/apps/dashboards/administration">
                                             <Typography className={classes.text}>
-                                                Administration
+                                                {t("sih-header-control-settings-menu-admin")}
                                             </Typography>
                                         </Link>
                                     </MenuItem>
@@ -194,7 +152,7 @@ const SettingsPopper: FC<ISettingsPopper> = ({ mode = 'dark' }) => {
                 )}
             </Popper>
         </div>
-    ) : null
-}
+    ) : null;
+};
 
-export default React.memo(SettingsPopper)
+export default React.memo(SettingsPopper);

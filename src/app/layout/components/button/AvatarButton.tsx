@@ -1,211 +1,111 @@
-import React, { FC, useEffect, useState } from 'react'
-import { makeStyles } from 'tss-react/mui'
-import { useNavigate } from 'react-router-dom'
-import { useMediaQuery } from 'react-responsive'
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import FormGroup from '@mui/material/FormGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Switch from '@mui/material/Switch'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
-import Grow from '@mui/material/Grow'
-import Paper from '@mui/material/Paper'
-import Popper from '@mui/material/Popper'
-import MenuItem from '@mui/material/MenuItem'
-import MenuList from '@mui/material/MenuList'
-import Typography from '@mui/material/Typography'
+import { FC, memo, useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import Grow from "@mui/material/Grow";
+import Paper from "@mui/material/Paper";
+import Popper from "@mui/material/Popper";
+import MenuItem from "@mui/material/MenuItem";
+import MenuList from "@mui/material/MenuList";
+import Typography from "@mui/material/Typography";
 import {
     QPLUS_KEYS,
     QplusLocalStorage,
     useQplusAuthContext,
-    useQplusCoreAuthContext
-} from '@databridge/qplus'
-import { Theme } from '@mui/material'
+    useQplusCoreAuthContext,
+    useQplusReportingContext
+} from "@databridge/qplus";
 
-import { useAppContext } from 'app/context/AppContext'
-import { dashboardUrl } from 'app/layout/constants/constants'
+import { useAppContext } from "app/context/AppContext";
+import { DASHBOARD_URL_PATH } from "app/layout/constants/constants";
+import { QPLUS_USER_ROLES } from "app/shared/constants/constants";
+import { useUserRole } from "app/shared/hooks";
+import { useStyles } from "./AvatarButton.styles";
 
 interface IUserAvatar {
-    mode?: string
+    mode?: string;
 }
 
-const UserAvatar: FC<IUserAvatar> = ({ mode = 'dark' }) => {
-    const [open, setOpen] = React.useState<boolean>(false)
-    const [isGodModeVisible, setIsGodModeVisible] = React.useState<boolean>(false)
-    const anchorRef = React.useRef<any>(null)
-    const [avatar, setAvatar] = useState<string>('')
-    const [username, setUsername] = useState<string>('')
-    const { appUser } = useQplusAuthContext()
-    const isTablet = useMediaQuery({ query: '(max-width: 1001px)' })
-    const { setIsAdminRole, logoutUser, isAdminRole, defaultPage } = useAppContext()
-    const [isAdmin, setIsAdmin] = React.useState<boolean>(isAdminRole)
-    const { logout } = useQplusCoreAuthContext()
-    const navigate = useNavigate()
+const UserAvatar: FC<IUserAvatar> = () => {
+    const { classes } = useStyles();
+    const navigate = useNavigate();
+    const { t } = useTranslation();
+    const isTablet = useMediaQuery({ query: "(max-width: 1001px)" });
 
-    useEffect(() => {
-        setIsAdmin(isAdminRole)
-    }, [isAdminRole])
+    const { appUser } = useQplusAuthContext();
+    const { logout } = useQplusCoreAuthContext();
+    const { setIsAdminRole, isAdminRole, logoutUser } = useAppContext();
+    const { clearReport } = useQplusReportingContext();
 
-    useEffect(() => {
-        if (!isAdmin) {
-            const { pathname } = new URL(window.location.href)
-            const isHashRoute = window.location.hash?.startsWith('#')
-            const path = isHashRoute ? window.location.hash.substring(2) : pathname
+    const [open, setOpen] = useState<boolean>(false);
+    const [isGodModeVisible, setIsGodModeVisible] = useState<boolean>(false);
+    const [avatar, setAvatar] = useState<string>("");
+    const [username, setUsername] = useState<string>("");
+    const anchorRef = useRef(null);
 
-            navigate(`${path}`, { replace: true })
-        }
-    }, [defaultPage, navigate, isAdmin])
-
-    useEffect(() => {
-        if (appUser) {
-            setUsername(appUser.name)
-            setAvatar(appUser.avatar)
-            setIsGodModeVisible(appUser?.roles?.includes('admin'))
-        }
-    }, [appUser])
-
-    const handleClose = (event: any) => {
+    const handleClose = (event: MouseEvent | TouchEvent) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
-            return
+            return;
         }
-        setOpen(false)
-    }
+        setOpen(false);
+    };
 
     const handleToggle = () => {
-        setOpen((prevOpen: boolean) => !prevOpen)
-    }
+        setOpen((prevOpen: boolean) => !prevOpen);
+    };
 
     const handleLogout = async () => {
         try {
-            await logout()
-            logoutUser()
+            await logout();
+            logoutUser();
         } catch (error) {
-            console.log('DEV Logout', error)
+            console.log("DEV Logout", error);
         }
-    }
-
-    useEffect(() => {
-        if (!isAdmin) {
-            // Because of this hook, it is forwarded to the demo page after every refresh
-            navigate(`${dashboardUrl}/${defaultPage}`)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAdmin])
+    };
 
     const handleIsAdminSwitch = () => {
-        setIsAdmin((prev: boolean) => !prev)
-        QplusLocalStorage.save(QPLUS_KEYS.QPLUS_ROLE_IS_ADMIN, !isAdmin)
-        setIsAdminRole(!isAdmin)
-    }
+        QplusLocalStorage.save(QPLUS_KEYS.QPLUS_ROLE_IS_ADMIN, !isAdminRole);
+        clearReport();
+        setIsAdminRole(!isAdminRole);
+        // To refresh all the necessary settings in the reporting component we temporary navigate to a loader page and back
+        navigate(`${DASHBOARD_URL_PATH}/loader`);
+    };
 
-    const useStyles = makeStyles()((theme: Theme) => ({
-        root: {
-            display: 'flex',
-            '& > *': {
-                margin: theme.spacing(1)
-            }
-        },
-        avatar: {
-            color: theme.palette.common.secondaryText,
-            backgroundColor: theme.palette.common.highlight10,
-            fontSize: '14px',
-            fontWeight: 500,
-            letterSpacing: 0,
-            lineHeight: '20px',
-            textAlign: 'center',
-            height: '40px',
-            width: '40px',
-            '&:hover': {
-                color: theme.palette.common.secondaryText,
-                backgroundColor: theme.palette.common.highlight10,
-                boxShadow: 'none !important'
-            }
-        },
-        button: {
-            height: '40px',
-            borderRadius: '32px',
-            backgroundColor: `${theme.palette.primary.contrastText} !important`,
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-            flexDirection: 'row',
-            boxShadow: 'none',
-            '&:hover': {
-                //you want this to be the same as the backgroundColor above
-                backgroundColor: `${theme.palette.primary.contrastText} !important`,
-                boxShadow: 'none !important'
-            }
-        },
-        paper: {
-            marginRight: theme.spacing(2)
-        },
-        icon: {
-            color: '#273540',
-            width: '24px',
-            height: '24px'
-        },
-        menuItem: {
-            fontWeight: 500,
-            color: '#000'
-        },
-        username: {
-            textAlign: 'left',
-            paddingLeft: '10px',
-            color: theme.palette.text.primary,
-            fontWeight: 500,
-            fontSize: '0.825rem !important',
-            '&:hover': {
-                color: theme.palette.text.primary
-            },
-            '@media (max-width: 1238px)': {
-                display: 'none'
-            }
-        },
-        listItemCheckbox: {
-            marginLeft: '5px',
-            width: '20px',
-            height: '20px',
-            '&:hover': {
-                backgroundColor: 'transparent'
-            }
-        },
-        dropdown: {
-            '@media (max-width: 1238px)': {
-                left: '0px !important'
-            },
-            '@media (max-width: 675px)': {
-                left: '-15px !important'
-            },
-            '@media (max-width: 655px)': {
-                left: '-25px !important'
-            },
-            '@media (max-width: 630px)': {
-                left: '-30px !important'
-            },
-            '@media (max-width: 590px)': {
-                left: '-35px !important'
-            }
+    useEffect(() => {
+        if (appUser) {
+            setUsername(appUser.name);
+            setAvatar(appUser.avatar);
+            setIsGodModeVisible(appUser?.roles?.includes(QPLUS_USER_ROLES.ADMIN));
         }
-    }))
+    }, [appUser]);
 
-    const { classes } = useStyles()
+    const currentRole = useUserRole(appUser, isAdminRole);
 
     return (
         <div className={classes.root}>
             <Button
                 ref={anchorRef}
-                aria-controls={open ? 'menu-avatar-grow' : undefined}
+                aria-controls={open ? "menu-avatar-grow" : undefined}
                 aria-haspopup="true"
                 variant="contained"
-                classes={{
-                    root: classes.button
-                }}
+                classes={{ root: classes.button }}
                 onClick={handleToggle}>
-                {' '}
                 <Avatar src="" className={classes.avatar}>
                     {avatar}
                 </Avatar>
-                {!isTablet && <Typography className={classes.username}>{username}</Typography>}
+                {!isTablet && (
+                    <Box display="flex" flexDirection="column">
+                        <Typography className={classes.username}>{username}</Typography>
+                        <Typography className={classes.role}>{currentRole}</Typography>
+                    </Box>
+                )}
             </Button>
             <Popper
                 className={classes.dropdown}
@@ -220,18 +120,16 @@ const UserAvatar: FC<IUserAvatar> = ({ mode = 'dark' }) => {
                         {...TransitionProps}
                         style={{
                             zIndex: 1000000000,
-                            transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'
+                            transformOrigin: placement === "bottom" ? "center top" : "center bottom"
                         }}>
-                        <Paper style={{ zIndex: 1000000000, minWidth: '150px' }}>
+                        <Paper style={{ zIndex: 1000000000, minWidth: "150px" }}>
                             <ClickAwayListener onClickAway={handleClose}>
                                 <MenuList
                                     autoFocusItem={open}
                                     id="menu-avatar-grow"
-                                    style={{ zIndex: 1000000000, fontSize: '12px' }}>
-                                    <MenuItem
-                                        className={classes.menuItem}
-                                        onClick={e => handleLogout()}>
-                                        Logout
+                                    style={{ zIndex: 1000000000, fontSize: "12px" }}>
+                                    <MenuItem className={classes.menuItem} onClick={handleLogout}>
+                                        {t("sih-header-control-avatar-menu-logout")}
                                     </MenuItem>
                                     {isGodModeVisible && (
                                         <MenuItem className={classes.menuItem}>
@@ -239,12 +137,14 @@ const UserAvatar: FC<IUserAvatar> = ({ mode = 'dark' }) => {
                                                 <FormControlLabel
                                                     control={
                                                         <Switch
-                                                            defaultChecked={isAdmin}
+                                                            checked={isAdminRole}
                                                             color="secondary"
-                                                            onClick={e => handleIsAdminSwitch()}
+                                                            onClick={handleIsAdminSwitch}
                                                         />
                                                     }
-                                                    label="Admin"
+                                                    label={t(
+                                                        "sih-header-control-avatar-menu-admin"
+                                                    )}
                                                 />
                                             </FormGroup>
                                         </MenuItem>
@@ -256,7 +156,7 @@ const UserAvatar: FC<IUserAvatar> = ({ mode = 'dark' }) => {
                 )}
             </Popper>
         </div>
-    )
-}
+    );
+};
 
-export default React.memo(UserAvatar)
+export default memo(UserAvatar);

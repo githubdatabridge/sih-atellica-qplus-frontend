@@ -11,33 +11,28 @@
     70% {
         width: 120px;
     }
-
-    100% {}
 }
 
 .draftJsMentionPlugin__mention__29BEd,
 .draftJsMentionPlugin__mention__29BEd:visited {
     display: inline-block;
     text-decoration: none;
-    color: rgb(255, 255, 255) !important;
+    color: white !important;
     cursor: text !important;
-    background: rgb(0, 153, 153) !important;
+    background: #009999 !important;
     padding-left: 8px !important;
     padding-right: 8px !important;
     border-radius: 10px !important;
-    font-family: 'Roboto' !important;
+    font-family: Siemens Sans, sans-serif !important;
 }
 
-div.DraftEditor-root {
+div.DraftEditor-root,
+div.DraftEditor-editorContainer {
     cursor: text;
     overflow-y: scroll;
     flex-grow: 1;
     scrollbar-width: none;
-    font-family: 'Roboto';
-}
-
-div.DraftEditor-editorContainer {
-    font-family: 'Roboto';
+    font-family: Siemens Sans, sans-serif !important;
 }
 
 div.DraftEditor-root::-webkit-scrollbar {
@@ -56,10 +51,6 @@ div.draftJsEmojiPlugin__emojiSelectPopover__1J1s0 {
     background: none;
 }
 
-.public-DraftEditorPlaceholder-root {
-    position: absolute;
-}
-
 .draftJsMentionPlugin__mentionSuggestionsEntryText__3Jobq {
     display: inline-block;
     margin-left: 8px;
@@ -69,7 +60,32 @@ div.draftJsEmojiPlugin__emojiSelectPopover__1J1s0 {
     max-width: 368px;
     font-size: 0.9em;
     margin-bottom: 0.2em;
-    font-family: 'Roboto' !important;
+    font-family: Siemens Sans, sans-serif !important;
+}
+
+.e13wqaj6,
+.e8k2yoa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.public-DraftEditorPlaceholder-inner {
+    position: absolute;
+    z-index: -1;
+    color: #A9A9AC;
+
+}
+
+div.DraftEditor-root,
+div.DraftEditor-editorContainer {
+    cursor: text;
+    overflow-y: scroll;
+    flex-grow: 1;
+    scrollbar-width: none;
+    font-family: Siemens Sans, sans-serif !important;
+    position: relative !important;
+
 }
 
 .react-grid-layout {
@@ -133,7 +149,7 @@ div.draftJsEmojiPlugin__emojiSelectPopover__1J1s0 {
     border-bottom: 2px solid rgba(0, 0, 0, 0.4);
 }
 
-.react-resizable-hide>.react-resizable-handle {
+.react-grid-item>.react-resizable-hide>.react-resizable-handle {
     display: none;
 }
 
@@ -148,7 +164,7 @@ div.draftJsEmojiPlugin__emojiSelectPopover__1J1s0 {
     background-repeat: no-repeat;
     background-origin: content-box;
     box-sizing: border-box;
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+');
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2IDYiIHN0eWxlPSJiYWNrZ3JvdW5kLWNvbG9yOiNmZmZmZmYwMCIgeD0iMHB4IiB5PSIwcHgiIHdpZHRoPSI2cHgiIGhlaWdodD0iNnB4Ij48ZyBvcGFjaXR5PSIwLjMwMiI+PHBhdGggZD0iTSA2IDYgTCAwIDYgTCAwIDQuMiBMIDQgNC4yIEwgNC4yIDQuMiBMIDQuMiAwIEwgNiAwIEwgNiA2IEwgNiA2IFoiIGZpbGw9IiMwMDAwMDAiLz48L2c+PC9zdmc+");
     background-position: bottom right;
     padding: 0 3px 3px 0;
     z-index: 9999999;

@@ -1,60 +1,67 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import { useMount } from 'react-use'
-import { makeStyles } from 'tss-react/mui'
-import { Grid, Paper } from '@mui/material'
-import { useQplusSelectionContext, useWindowDimensions, QplusReporting } from '@databridge/qplus'
-import { Theme } from '@mui/material'
+import { useEffect, useMemo, useState } from "react";
+import { useMount } from "react-use";
+import { Grid, Paper } from "@mui/material";
+import { Backspace } from "@mui/icons-material";
+import {
+    QplusReporting,
+    useQplusReportingUiContext,
+    useQplusSelectionContext,
+    useWindowDimensions
+} from "@databridge/qplus";
 
-import { OFFSET_COLLAPSED, OFFSET_EXPANDED } from 'app/common/config'
-import { useAppContext } from 'app/context/AppContext'
-import DashboardTemplate from '../shared/components/DashboardTemplate'
+import { OFFSET_COLLAPSED, OFFSET_EXPANDED } from "app/common/config";
+import { useAppContext } from "app/context/AppContext";
+import DashboardTemplate from "../shared/components/DashboardTemplate";
+import { useStyles } from "./ReportingDashboard.styles";
 
-const ReportingDashboard = () => {
-    const PAGE_NAME = 'reporting'
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [qlikAppId, setQlikAppId] = useState<string>('')
-    const [windowHeight, setWindowHeight] = useState<number>(0)
-    const { height } = useWindowDimensions()
-    const { setDockedFields, setMultiAppFields } = useQplusSelectionContext()
-    const { isHeaderVisible, pages } = useAppContext()
+function ReportingDashboard() {
+    const PAGE_NAME = "reporting";
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [qlikAppId, setQlikAppId] = useState<string>("");
+    const [windowHeight, setWindowHeight] = useState<number>(0);
+    const { height } = useWindowDimensions();
+    const { setDockedFields, setMultiAppFields } = useQplusSelectionContext();
+    const { isHeaderVisible, pages } = useAppContext();
+    const { setReportingEraseNode } = useQplusReportingUiContext();
 
     const views = useMemo(
         () => [
-            'Filter',
-            'Comments',
-            'ImportExport',
-            'Share',
-            'Clone',
-            'Erase',
-            'Reports',
-            'Remove',
-            'Cancel',
-            'Edit',
-            'Save'
+            "Filter",
+            "Comments",
+            "ImportExport",
+            "Share",
+            "Clone",
+            "Erase",
+            "Reports",
+            "Remove",
+            "Cancel",
+            "Edit",
+            "Save"
         ],
         []
-    )
+    );
 
     useMount(async () => {
-        setIsLoading(true)
-        setDockedFields([])
-        setMultiAppFields([])
-        setIsLoading(false)
-    })
+        setIsLoading(true);
+        setDockedFields([]);
+        setMultiAppFields([]);
+        setIsLoading(false);
+        setReportingEraseNode(<Backspace />);
+    });
 
     useEffect(() => {
         if (pages) {
-            setQlikAppId(pages!.get(PAGE_NAME) || '')
+            setQlikAppId(pages!.get(PAGE_NAME) || "");
         }
-    }, [pages])
+    }, [pages]);
 
     useEffect(() => {
-        setWindowHeight(height - (isHeaderVisible ? OFFSET_EXPANDED : OFFSET_COLLAPSED))
-    }, [height, isHeaderVisible])
+        setWindowHeight(height - (isHeaderVisible ? OFFSET_EXPANDED : OFFSET_COLLAPSED));
+    }, [height, isHeaderVisible]);
 
-    const { classes } = useStyles()
+    const { classes } = useStyles();
 
-    if (windowHeight === 0 || isLoading) return null
+    if (windowHeight === 0 || isLoading) return null;
 
     return (
         <DashboardTemplate>
@@ -69,9 +76,12 @@ const ReportingDashboard = () => {
                                         views={views}
                                         showSignature={false}
                                         exportOptions={{
-                                            types: ['xlsx', 'png']
+                                            types: ["xlsx", "png", "pdf"]
                                         }}
                                         qlikAppId={qlikAppId}
+                                        classNames={{
+                                            toolbarIcon: classes.vizToolbarIcon
+                                        }}
                                     />
                                 </Grid>
                             </Paper>
@@ -80,27 +90,7 @@ const ReportingDashboard = () => {
                 </Grid>
             </Grid>
         </DashboardTemplate>
-    )
+    );
 }
 
-export default ReportingDashboard
-
-const useStyles = makeStyles()((theme: Theme) => ({
-    root: {
-        flexGrow: 1
-    },
-    reportingRoot: {
-        border: '1px solid red'
-    },
-    header: {
-        boxShadow: '0 0 0rem rgba(0,0,0,0.20);'
-    },
-    paper: {
-        textAlign: 'center',
-        border: 'none',
-        boxShadow: 'none',
-        color: theme.palette.text.secondary,
-        margin: '8px',
-        borderRadius: '8px'
-    }
-}))
+export default ReportingDashboard;
