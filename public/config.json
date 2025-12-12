@@ -3,7 +3,7 @@
     "VITE_TENANT_ID": "sih",
     "VITE_CUSTOMER_ID": "sih",
     "VITE_MASHUP_APP_ID": "qplus",
-    "VITE_QPLUS_APP_API": "http://localhost:3002",
+    "VITE_QPLUS_APP_API": "https://local.databridge.ch:3002",
     "VITE_LOGIN_URL": "https://qs-internal.databridge.ch/anonym/extensions/sh-mash-login/index.html",
     "VITE_DEFAULT_THEME": "qplus-sih-theme-light",
     "VITE_QLIK_GLOBAL_EVENTS": "closed,warning,error",
