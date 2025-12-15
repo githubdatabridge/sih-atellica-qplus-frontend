@@ -14,6 +14,9 @@ import { IS_DEV } from "app/config/appConfig";
 import { processUrl } from "app/utils/appUtils";
 import { AppContext, AppContextType, TPages, TQlikApp } from "./AppContext";
 
+// Module-level cache for i18n to survive HMR in dev mode
+let cachedBrowserLanguage: string | null = null;
+
 interface Props {
     isInitialized: boolean;
     defaultPage: string;
@@ -36,7 +39,7 @@ const AppProvider: React.FC<Props> = ({
     hasWrongConfiguration = false,
     children
 }) => {
-    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [isI18nReady, setIsI18nReady] = useState<boolean>(false);
     const [browserLanguage, setBrowserLanguage] = useState<string>("");
     const [isAdminRole, setIsAdmin] = useState<boolean>(false);
     const [isHeaderVisible, setHeaderVisible] = useState<boolean>(true);
@@ -50,6 +53,9 @@ const AppProvider: React.FC<Props> = ({
     const [showSessionExpirationDialog, setSessionExpirationDialog] = useState<boolean>(false);
     const [showAccessDeniedDialog, setShowAccessDeniedDialog] = useState<boolean>(false);
     const [showUnauthorizedDialog, setShowUnauthorizeddDialog] = useState<boolean>(false);
+
+    // Consolidated ready state - only true when ALL initialization is complete
+    const isReady = isInitialized && isI18nReady && browserLanguage && modifiedApps.length > 0;
 
     const setIsUserGuard = (isGuard: boolean) => {
         setUserGuard(isGuard);
@@ -88,7 +94,13 @@ const AppProvider: React.FC<Props> = ({
 
     useMount(async () => {
         try {
-            setIsLoading(true);
+            // Use cached language if available (HMR scenario)
+            if (cachedBrowserLanguage) {
+                setBrowserLanguage(cachedBrowserLanguage);
+                setIsI18nReady(true);
+                return;
+            }
+
             // Get the browser language with fallback to English
             const [language, region] = navigator.language.split("-");
             const lowercaseRegion = region ? region.toLowerCase() : "";
@@ -96,11 +108,14 @@ const AppProvider: React.FC<Props> = ({
             const mappedLanguageCode = mapLanguageCode(languageCode);
             console.log("Browser Language", mappedLanguageCode);
             await initI18n(languageResources.app, mappedLanguageCode);
+            // Cache and set both states together to minimize re-renders
+            cachedBrowserLanguage = mappedLanguageCode;
             setBrowserLanguage(mappedLanguageCode);
+            setIsI18nReady(true);
         } catch (error) {
             console.error("Qplus Error", error);
-        } finally {
-            setIsLoading(false);
+            // Still mark as ready to allow error handling
+            setIsI18nReady(true);
         }
     });
 
@@ -139,12 +154,9 @@ const AppProvider: React.FC<Props> = ({
 
     return (
         <>
-            {(isLoading || !isInitialized || modifiedApps.length === 0) && <SplashScreen />}
-            {isInitialized &&
-                browserLanguage &&
-                !hasWrongConfiguration &&
-                modifiedApps.length > 0 && (
-                    <div style={{ display: isLoading ? "none" : "block" }}>
+            {!isReady && <SplashScreen />}
+            {isReady && !hasWrongConfiguration && (
+                    <div>
                         <AppContext.Provider
                             value={{
                                 hostname,
@@ -204,7 +216,7 @@ const AppProvider: React.FC<Props> = ({
                     </div>
                 )}
 
-            {!isLoading && (
+            {isI18nReady && (
                 <ErrorDialog
                     title={translations.errorTitle}
                     primaryText={

@@ -9,11 +9,19 @@ import { createQlikAppObject } from "app/utils/appUtils";
 import { setSessionStorageItem, getSessionStorageItem } from "app/utils/storageUtils";
 import startup from "app/json/startup.json";
 
+// Module-level cache to survive HMR in dev mode
+let cachedAppInit: any = null;
+
 export const useAppInit = (isDev, setAppInit) => {
     const initDoneRef = useRef(false);
 
     useEffect(() => {
         const initApp = async () => {
+            // Use cached result if available (HMR scenario)
+            if (cachedAppInit) {
+                setAppInit(cachedAppInit);
+                return;
+            }
             if (initDoneRef.current) {
                 return;
             }
@@ -61,14 +69,16 @@ export const useAppInit = (isDev, setAppInit) => {
                     setSessionStorageItem(POCWEB_DEFAULT_PAGE, defaultPage);
                 }
 
-                // Update app state
-                setAppInit({
+                // Update app state and cache for HMR
+                const appInitData = {
                     defaultPage,
                     qApps,
                     vp,
                     pages,
                     hasWrongConfiguration: pages.size === 0 || !vp // This should be determined based on your validation logic
-                });
+                };
+                cachedAppInit = appInitData;
+                setAppInit(appInitData);
 
                 initDoneRef.current = true;
             } catch (error) {

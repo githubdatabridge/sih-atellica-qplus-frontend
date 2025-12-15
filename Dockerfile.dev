@@ -1,0 +1,20 @@
+FROM node:20-alpine
+
+WORKDIR /usr/src/app
+
+# Install dependencies first (for better caching)
+COPY ./sih-atellica-qplus-frontend/package.json ./
+COPY ./sih-atellica-qplus-frontend/yarn.lock ./
+COPY ./sih-atellica-qplus-frontend/.npmrc ./
+
+RUN yarn install
+
+# Copy source code
+COPY ./sih-atellica-qplus-frontend .
+
+# Copy certificates
+COPY ./certificates ../certificates
+
+EXPOSE 7005
+
+CMD ["yarn", "start"]
