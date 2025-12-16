@@ -25,7 +25,8 @@
         "commitlint.config.js",
         "src",
         "env.ts",
-        "vite.config.ts"
+        "vite.config.ts",
+        "vite.config.mjs"
     ],
 
     "references": []

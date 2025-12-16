@@ -11,10 +11,27 @@ let root: ReactDOM.Root | null = null;
 (async function () {
     // Skip config fetch if already loaded (HMR scenario)
     if (!window.env) {
-        const filePath = import.meta.env.DEV ? "/config.development.json" : "/config.json";
-        const response = await fetch(filePath);
-        const config: RuntimeEnvs = await response.json();
-        window.env = config;
+        const primaryPath = import.meta.env.DEV ? "/config.development.json" : "/config.json";
+        const fallbackPath = "/config.json";
+
+        const loadConfig = async (path: string) => {
+            const response = await fetch(path);
+            if (!response.ok) {
+                throw new Error(`Failed to load ${path}: ${response.status}`);
+            }
+            return response.json() as Promise<RuntimeEnvs>;
+        };
+
+        try {
+            // Try the dev-specific file first, then fall back to shared config.
+            window.env = await loadConfig(primaryPath);
+        } catch (error) {
+            if (import.meta.env.DEV) {
+                window.env = await loadConfig(fallbackPath);
+            } else {
+                throw error;
+            }
+        }
     }
 })()
     .then(() => {
