@@ -10,7 +10,7 @@
         "start-server-no-build": "node index.js",
         "win-svc-install": "tsc && vite build && node ./service-install.js",
         "win-svc-uninstall": "node ./service-uninstall.js",
-        "prepare": "husky",
+        "prepare": "husky && husky install",
         "lint": "eslint src/**/*.{ts,tsx}",
         "install-public": "yarn install --registry=https://registry.yarnpkg.com"
     },
@@ -80,7 +80,7 @@
         "eslint-plugin-prettier": "^5.1.3",
         "eslint-plugin-react": "^7.28.0",
         "eslint-plugin-react-hooks": "^4.3.0",
-        "husky": "^9.0.10",
+        "husky": "^8.0.0",
         "lint-staged": "^15.2.1",
         "prettier": "^3.2.5",
         "react-inject-env": "^2.1.0",
