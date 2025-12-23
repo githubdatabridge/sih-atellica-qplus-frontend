@@ -1,7 +1,7 @@
 import { Theme } from "@mui/material";
 import { makeStyles } from "tss-react/mui";
 
-export const useStyles = makeStyles()((theme: Theme) => ({
+export const useStyles = makeStyles()((_theme: Theme) => ({
     list: {
         overflow: "auto",
         display: "flex",

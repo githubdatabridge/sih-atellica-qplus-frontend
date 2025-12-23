@@ -1,0 +1,20 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Collaboration/Models/Action" />
+
+# Action
+
+Actions are a notification-like entity that is created on the backend when a user receives a reply on their comment or when they get mentioned.
+
+## Properties
+
+| Name      | Type         | Description                                                    |
+| :-------- | :----------- | :------------------------------------------------------------- |
+| id        | number       | ID of the Action                                               |
+| qsUserId  | string       |                                                                |
+| viewedAt  | Date \| Null | If the value is null the user hasn't "opened" the notification |
+| commentId | number       | ID of the related comment                                      |
+| comment   | Comment      | Comment entity                                                 |
+| viewedAt  | Date         |                                                                |
+| updatedAt | Date         |                                                                |
+| deletedAt | Date         |                                                                |

@@ -9,8 +9,16 @@ import { createQlikAppObject } from "app/utils/appUtils";
 import { setSessionStorageItem, getSessionStorageItem } from "app/utils/storageUtils";
 import startup from "app/json/startup.json";
 
+interface AppInitData {
+    defaultPage: string;
+    qApps: ReturnType<typeof createQlikAppObject>[];
+    vp: string;
+    pages: Map<string, string>;
+    hasWrongConfiguration: boolean;
+}
+
 // Module-level cache to survive HMR in dev mode
-let cachedAppInit: any = null;
+let cachedAppInit: AppInitData | null = null;
 
 export const useAppInit = (isDev, setAppInit) => {
     const initDoneRef = useRef(false);

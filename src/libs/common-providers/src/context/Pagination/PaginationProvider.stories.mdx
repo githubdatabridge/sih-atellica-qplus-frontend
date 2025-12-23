@@ -1,0 +1,21 @@
+import { ArgsTable, Meta, Description } from '@storybook/addon-docs/blocks'
+import { PaginationProvider } from './PaginationProvider'
+
+<Meta title="Common/Providers/PaginationProvider" component={PaginationProvider} />
+
+# PaginationProvider
+
+<Description of={PaginationProvider} />
+
+### Props
+
+<ArgsTable of={PaginationProvider} />
+
+### usePaginationContext
+
+```
+hasMore: boolean
+page: number
+setPagination: (paginationData: any) => void
+loadMore: () => void
+```

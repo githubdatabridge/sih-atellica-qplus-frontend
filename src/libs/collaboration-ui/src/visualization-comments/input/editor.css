@@ -1,0 +1,51 @@
+div.DraftEditor-root {
+    cursor: text;
+    overflow-y: scroll;
+    flex-grow: 1;
+    scrollbar-width: none;
+    font-family: Source Sans Pro, sans-serif;
+}
+
+div.DraftEditor-editorContainer {
+    font-family: Source Sans Pro, sans-serif;
+}
+
+div.DraftEditor-root::-webkit-scrollbar {
+    display: none;
+}
+
+div.draftJsEmojiPlugin__emojiSelectPopover__1J1s0 {
+    transform: translateX(-85%);
+}
+
+.draftJsEmojiPlugin__emojiSelectButton__3sPol,
+.draftJsEmojiPlugin__emojiSelectButtonPressed__2Tezu {
+    height: auto;
+    width: auto;
+    border: none;
+    background: none;
+}
+
+.public-DraftEditorPlaceholder-root {
+    color: rgb(186, 186, 193);
+    margin-bottom: -20px;
+    pointer-events: none;
+}
+
+.draftJsMentionPlugin__mentionSuggestionsEntryText__3Jobq {
+    display: inline-block;
+    margin-left: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 368px;
+    font-size: 0.9em;
+    margin-bottom: 0.2em;
+    font-family: Source Sans Pro, sans-serif !important;
+}
+
+.emoji-button-wrapper button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

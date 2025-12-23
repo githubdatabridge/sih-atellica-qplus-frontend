@@ -1,0 +1,21 @@
+import { ArgsTable, Meta, Description } from '@storybook/addon-docs/blocks'
+import { AuthProvider } from './AuthProvider'
+
+<Meta title="CRM/Providers/AuthProvider" component={AuthProvider} />
+
+# AuthProvider
+
+<Description of={AuthProvider} />
+
+### Props
+
+<ArgsTable of={AuthProvider} />
+
+#### useAuthContext()
+
+```
+user: User | null
+isAuthenticated: boolean
+currentCompany: CompanyUser | null
+setCurrentCompany: (c: CompanyUser) => void
+```

@@ -1,0 +1,5 @@
+{
+    "sideEffects": false,
+    "module": "./index.ts",
+    "main": "../../qlik/context/index.ts"
+}

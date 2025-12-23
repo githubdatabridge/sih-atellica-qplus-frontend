@@ -1,0 +1,5 @@
+export { default as SvgFilePdfIcon } from './SvgFilePdfIcon'
+export { default as SvgFilePngIcon } from './SvgFilePngIcon'
+export { default as SvgFileXlsIcon } from './SvgFileXlsIcon'
+export { default as SvgEmptyReportingIcon } from './SvgEmptyReportingIcon'
+export { default as SvgExportIcon } from './SvgExportIcon'

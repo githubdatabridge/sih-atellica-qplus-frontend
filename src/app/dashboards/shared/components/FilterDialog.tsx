@@ -24,7 +24,7 @@ interface IFilterDialogProps {
     sheetId: string;
 }
 
-const FilterDialog: FC<IFilterDialogProps> = ({ qlikAppId, sheetId, title }) => {
+const FilterDialog: FC<IFilterDialogProps> = ({ qlikAppId, sheetId, title: _title }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const { cssFullscreenDialogButtonIcon, cssFullscreenDialogIcon, eraseNode } =

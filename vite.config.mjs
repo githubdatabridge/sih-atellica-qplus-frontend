@@ -34,7 +34,18 @@ export default defineConfig(({ mode }) => {
     base: "/",
     plugins: [react(), tsconfigPaths()],
     build: {
-      outDir: "build"
+      outDir: "build",
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+            'vendor-mui': ['@mui/material', '@mui/icons-material', '@mui/lab', '@mui/system'],
+            'vendor-qlik': ['enigma.js'],
+            'vendor-utils': ['lodash-es', 'axios', 'dayjs', 'date-fns', 'moment'],
+            'vendor-draft': ['draft-js', '@draft-js-plugins/editor', '@draft-js-plugins/mention', '@draft-js-plugins/emoji'],
+          }
+        }
+      }
     },
     server: {
       port,

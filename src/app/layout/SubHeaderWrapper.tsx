@@ -20,12 +20,12 @@ interface ISubHeaderWrapperProps {
 
 const SubHeaderWrapper: React.FC<ISubHeaderWrapperProps> = ({
     parentPages,
-    subPages = [],
-    currentSubPage = "",
+    subPages: _subPages = [],
+    currentSubPage: _currentSubPage = "",
     shouldHideSubSettings = true,
     isHeaderVisible = true,
     handlePageChangeCallback,
-    handleSubPageChangeCallback,
+    handleSubPageChangeCallback: _handleSubPageChangeCallback,
     handleHeaderToggleCallback
 }) => {
     const [isHeader, setIsHeader] = useState<boolean>(isHeaderVisible);

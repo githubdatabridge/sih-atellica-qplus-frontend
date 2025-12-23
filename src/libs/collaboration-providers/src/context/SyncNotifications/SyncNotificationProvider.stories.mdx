@@ -1,0 +1,51 @@
+import { ArgsTable, Meta, Description } from '@storybook/addon-docs/blocks'
+import { SyncNotificationProvider } from './SyncNotificationProvider'
+
+<Meta
+    title="Collaboration/Providers/SyncNotificationProvider"
+    component={SyncNotificationProvider}
+/>
+
+# SyncNotificationProvider
+
+<Description of={SyncNotificationProvider} />
+
+### Props
+
+<ArgsTable of={SyncNotificationProvider} />
+
+### useSyncNotificationContext
+
+```
+type: SyncType | null
+notify: (type: SyncType | null) => void
+```
+
+#### Example usage
+
+Notify:
+
+```tsx
+const { notify } = useSyncNotificationContext()
+
+notify(SyncType.NOTES)
+```
+
+Respond to notifications:
+
+```tsx
+const { type } = useSyncNotificationContext()
+
+useUpdateEffect(() => {
+    if (!type) return
+
+    switch (type) {
+        case SyncType.NOTES:
+            // Execute some logic
+            return
+
+        default:
+            break
+    }
+}, [type])
+```

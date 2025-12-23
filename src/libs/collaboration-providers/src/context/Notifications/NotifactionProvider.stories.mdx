@@ -1,0 +1,26 @@
+import { ArgsTable, Meta, Description } from '@storybook/addon-docs/blocks'
+import { NotificationProvider } from './NotificationProvider'
+
+<Meta title="Collaboration/Providers/NotificationProvider" component={NotificationProvider} />
+
+# NotificationProvider
+
+<Description of={NotificationProvider} />
+
+### Props
+
+<ArgsTable of={NotificationProvider} />
+
+### useNotificationContext
+
+```
+userTaggedInCommentSubject: Subject<Notification<userTaggedInCommentData>> | null
+userCommentRepliedSubject: Subject<Notification<userCommentRepliedData>> | null
+userCreatedReactionSubject: Subject<Notification<userCreatedReactionData>> | null
+customerCommentCountChangedSubject: Subject<
+    Notification<customerCommentCountChangedData>
+> | null
+customerReactionCountChangedSubject: Subject<
+    Notification<customerReactionCountChangedData>
+> | null
+```

@@ -1,0 +1,23 @@
+export default {
+    fieldClear: 'qplus-selectionbar-clear-field-tooltip',
+    search: 'qplus-selectionbar-search',
+    searchCancel: 'qplus-selectionbar-search-cancel',
+    selectAll: 'qplus-selectionbar-selectall',
+    selectPossible: 'qplus-selectionbar-selectpossible',
+    selectAlternative: 'qplus-selectionbar-selectalternative',
+    selectExcluded: 'qplus-selectionbar-selectexcluded',
+    clear: 'qplus-selectionbar-clear-tooltip',
+    undo: 'qplus-selectionbar-undo-tooltip',
+    redo: 'qplus-selectionbar-redo-tooltip',
+    confirm: 'qplus-selectionbar-selection-confirm',
+    cancel: 'qplus-selectionbar-selection-cancel',
+    advanced: 'qplus-selectionbar-selection-advanced',
+    saveFilters: 'qplus-selectionbar-save-filters',
+    dockFilter: 'qplus-selection-contenxt-menu-dock',
+    lockFilter: 'qplus-selection-contenxt-menu-lock',
+    lockedFilter: 'qplus-selection-locked-filter',
+    clearFilter: 'qplus-selection-clear-filter',
+    clearField: 'qplus-selection-clear-field',
+    dockedFilter: 'qplus-selection-docked-filter',
+    globalFilter: 'qplus-selection-global-filter'
+}

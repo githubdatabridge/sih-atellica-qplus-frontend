@@ -26,6 +26,7 @@ interface Props {
     value?: AppContextType;
     hostname?: string;
     vp?: string;
+    children?: React.ReactNode;
 }
 
 const AppProvider: React.FC<Props> = ({

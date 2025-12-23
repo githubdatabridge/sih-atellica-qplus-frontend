@@ -11,7 +11,7 @@ interface Props {
     width?: number;
 }
 
-function SelectionBar({ onSelectionChange, isVertical = false, width }: Props): ReactElement {
+function SelectionBar({ onSelectionChange: _onSelectionChange, isVertical = false, width }: Props): ReactElement {
     const { classes } = useStyles();
     const theme = useTheme();
 

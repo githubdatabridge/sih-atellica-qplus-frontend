@@ -19,7 +19,7 @@ export const muiCache = createCache({
     prepend: true
 });
 
-const GlobalCssPriority: FC = ({ children }) => (
+const GlobalCssPriority: FC<{ children: ReactNode }> = ({ children }) => (
     <StyledEngineProvider injectFirst>
         {/* Your component tree. Now you can override MUI's styles. */}
         {children}
@@ -32,7 +32,7 @@ const typographySettings: ThemeOptions = {
     }
 };
 
-function ThemeProvider({ forceDarkTheme, children }: Props) {
+function ThemeProvider({ forceDarkTheme: _forceDarkTheme, children }: Props) {
     // PAM: Force black mode => /* [forceDarkTheme, prefersDarkMode], */
     const theme = React.useMemo(
         () =>

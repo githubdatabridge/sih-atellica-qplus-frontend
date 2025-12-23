@@ -1,0 +1,21 @@
+import { ArgsTable, Meta, Description } from '@storybook/addon-docs/blocks'
+import { UserPreferencesProvider } from './UserPreferencesProvider'
+
+<Meta title="Core/Providers/UserPreferencesProvider" component={UserPreferencesProvider} />
+
+# UserPreferencesProvider
+
+<Description of={UserPreferencesProvider} />
+
+### Props
+
+<ArgsTable of={UserPreferencesProvider} />
+
+### useUserPreferencesContext
+
+```
+userPreferences: UserPreferences | null
+setUserPreferences: (u: UserPreferences) => void
+loadPreferences: () => void
+refreshPreferences: () => void
+```

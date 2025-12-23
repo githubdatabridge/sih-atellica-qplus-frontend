@@ -1,0 +1,17 @@
+@keyframes bPulse {
+    0% {
+        -moz-box-shadow: 0 0 0 0 rgb(95, 175, 89, 0.8);
+        box-shadow: 0 0 0 0 rgb(95, 175, 89, 0.8);
+        border-radius: 24px;
+    }
+
+    70% {
+        -moz-box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+        box-shadow: 0 0 0 10px rgba(204, 169, 44, 0);
+    }
+
+    100% {
+        -moz-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+        box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+    }
+}

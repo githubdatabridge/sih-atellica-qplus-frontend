@@ -143,6 +143,7 @@ const RenderGridItem: FC<{ col: Column; qlikAppId: string }> = ({ col, qlikAppId
                         }
                     }}
                     visualizationOptions={visualizationOptions}
+
                 />
             )}
         </Grid>

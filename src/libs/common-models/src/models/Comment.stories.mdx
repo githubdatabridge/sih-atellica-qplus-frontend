@@ -1,0 +1,23 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Collaboration/Models/Comment" />
+
+# Comment
+
+## Properties
+
+| Name            | Type          | Description                             |
+| :-------------- | :------------ | :-------------------------------------- |
+| id              | number        | ID of the Action                        |
+| qsUserId        | string        |                                         |
+| qlikStateId     | number        |                                         |
+| qlikState       | QlikState     |                                         |
+| visualizationId | number        |                                         |
+| commentId       | number        | Parent comment ID                       |
+| content         | string        | Stringified Draft.js EditorContent JSON |
+| comments        | Comment[]     | Comment replies                         |
+| scope           | string        |                                         |
+| createdAt       | Date          |                                         |
+| updatedAt       | Date          |                                         |
+| user            | SocialUser    |                                         |
+| visualization   | Visualization |                                         |

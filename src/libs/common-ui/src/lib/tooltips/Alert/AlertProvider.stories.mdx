@@ -1,0 +1,25 @@
+import { ArgsTable, Meta, Description } from '@storybook/addon-docs/blocks'
+import { AlertProvider } from './AlertProvider'
+
+<Meta title="Common/Providers/AlertProvider" component={AlertProvider} />
+
+# AlertProvider
+
+<Description of={AlertProvider} />
+
+### Props
+
+<ArgsTable of={AlertProvider} />
+
+### useAlertContext
+
+```
+isLoading: boolean
+showLoading: Dispatch<any>
+showToast: (
+    message: string,
+    type?: AlertType,
+    duration?: AlertDuration,
+    actionUrl?: string | null
+) => void
+```

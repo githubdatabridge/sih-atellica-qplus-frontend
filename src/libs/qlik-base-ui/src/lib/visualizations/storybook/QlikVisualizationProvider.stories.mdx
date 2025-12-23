@@ -1,0 +1,25 @@
+import { ArgsTable, Meta, Description } from '@storybook/addon-docs/blocks'
+import { QlikVisualizationProvider } from '@databridge/qlik-base-ui'
+
+<Meta title="Qlik/Components/QlikVisualizationProvider" component={QlikVisualizationProvider} />
+
+# QlikVisualizationProvider
+
+<Description of={QlikVisualizationProvider} />
+
+### Props
+
+<ArgsTable of={QlikVisualizationProvider} />
+
+The `QlikVisualizationProvider` exposes the following properties that can be used with the `useQlikVisualizationContext` hook:
+
+```tsx
+const {
+    visualizationId,
+    setVisualizationId,
+    onVisualizationFullscreen,
+    setOnVisualizationFullscreen,
+    onVisualizationExport,
+    setOnVisualizationExport
+} = useQlikVisualizationContext()
+```
